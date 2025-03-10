@@ -6,10 +6,13 @@ import com.pagamentos.contas_a_pagar.application.service.ContasPagarService;
 import com.pagamentos.contas_a_pagar.application.service.ImportarCsvService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -49,4 +52,22 @@ public class ContasPagarResource {
                 .map(conta -> ResponseEntity.ok(mapper.toDTO(conta)))
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/total-pago")
+    public BigDecimal calculateTotalPaidInPeriod(@RequestParam("inicio") LocalDateTime inicio,
+                                                 @RequestParam("fim") LocalDateTime fim) {
+        return service.calculateTotalPaidInPeriod(inicio,fim);
+    }
+
+    @GetMapping("/filtrar")
+    public List<ContasPagarDTO> lisfindByDescriptionAndDueDate(
+            @RequestParam("descricao") String descricao,
+            @RequestParam("dataVencimento") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataVencimento){
+
+        return service.lisfindByDescriptionAndDueDate(descricao, dataVencimento)
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
+    }
+
 }

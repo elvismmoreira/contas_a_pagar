@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public interface ContasPagarRepository extends JpaRepository<ContasPagar, UUID> {
 
-//    @Query("SELECT c FROM ContasPagar c WHERE (:descricao IS NULL OR c.descricao LIKE %:descricao%) AND (:dataVencimento IS NULL OR c.dataVencimento = :dataVencimento)")
-//    List<ContasPagar> findByDescriptionAndDueDate(@Param("descricao") String descricao, @Param("dataVencimento") LocalDateTime dataVencimento);
-//
-//    @Query("SELECT SUM(c.valor) FROM ContasPagar c WHERE c.situacao = 'PAGA' AND c.dataPagamento BETWEEN :inicio AND :fim")
-//    Optional<BigDecimal> calculateTotalPaidInPeriod(@Param("inicio") LocalDateTime inicio, @Param("fim") LocalDateTime fim);
+    @Query("SELECT c FROM ContasPagar c WHERE (:descricao IS NULL OR c.descricao LIKE %:descricao%) AND (:data_vencimento IS NULL OR c.data_vencimento = :data_vencimento)")
+    List<ContasPagar> findByDescriptionAndDueDate(@Param("descricao") String descricao, @Param("dataVencimento") LocalDateTime dataVencimento);
+
+    @Query("SELECT SUM(c.valor) FROM ContasPagar c WHERE c.situacao = 'PAGO' AND c.data_pagamento BETWEEN :inicio AND :fim")
+    Optional<BigDecimal> calculateTotalPaidInPeriod(@Param("inicio") LocalDateTime inicio, @Param("fim") LocalDateTime fim);
 
 }
